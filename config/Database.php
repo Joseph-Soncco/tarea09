@@ -1,22 +1,27 @@
 <?php
-// db_connection.php
+class Database
+{
+    private $host = 'localhost';
+    private $db_name = 'aprendePeru';
+    private $username = 'root';
+    private $password = '';
+    private $conn;
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "aprendePeru";
+    public function getConnection()
+    {
+        $this->conn = null;
 
-// Crear conexión
-$conn = new mysqli($servername, $username, $password, $dbname);
+        try {
+            $this->conn = new PDO(
+                "mysql:host=" . $this->host . ";dbname=" . $this->db_name . ";charset=utf8mb4",
+                $this->username,
+                $this->password
+            );
+            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $exception) {
+            echo "Error de conexión: " . $exception->getMessage();
+        }
 
-// Verificar conexión
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+        return $this->conn;
+    }
 }
-
-// Establecer el charset a utf8mb4 para soportar caracteres especiales y emojis
-if (!$conn->set_charset("utf8mb4")) {
-
-}
-
-?>
